@@ -1,22 +1,36 @@
-# materi.php (Versi Legacy/Kotor)
-def tampil():
-    # Koneksi db langsung di fungsi
-    db = ["Matematika", "Fisika", "Biologi"]
-    u = ["Andi", "Budi"]
-    
-    # Logic berantakan & penamaan variabel satu huruf
-    for d in db:
-        print("Materi: " + d) # cetak langsung
-        s = 2 # status magic number
-        if s == 2:
-            print("Status: Selesai")
+from dataclasses import dataclass
 
-# Fungsi yang melakukan banyak hal (I/O + Logic)
-def tambah2(n):
-    if n != "":
-        print("Menambahkan...")
-        return True
-    else:
-        return False
+# Menggunakan Konstanta untuk menghindari Magic Numbers [cite: 5]
+STATUS_SELESAI = 2
 
-tampil()
+@dataclass
+class Materi:
+    judul: str
+    status: int
+
+class MateriService:
+    """Kelas khusus menangani Logika Bisnis (Prinsip SRP) [cite: 5]"""
+    def __init__(self):
+        self.daftar_materi = [
+            Materi("Matematika", STATUS_SELESAI),
+            Materi("Fisika", STATUS_SELESAI),
+            Materi("Biologi", STATUS_SELESAI)
+        ]
+
+    def dapatkan_semua_materi(self):
+        return self.daftar_materi
+
+class KonsolUI:
+    """Kelas khusus menangani Tampilan/Output (Prinsip SRP) [cite: 5]"""
+    def tampilkan_konten(self, daftar_materi):
+        for materi in daftar_materi:
+            print(f"Materi: {materi.judul}")
+            if materi.status == STATUS_SELESAI:
+                print("Status: Materi Telah Selesai")
+
+# Inisialisasi dengan penamaan yang bermakna [cite: 5]
+service = MateriService()
+ui = KonsolUI()
+
+materi_tersedia = service.dapatkan_semua_materi()
+ui.tampilkan_konten(materi_tersedia)
